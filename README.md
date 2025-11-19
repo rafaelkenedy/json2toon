@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# JSON to Toon Converter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, React-based web application that converts JSON files into the "Token-Oriented Object Notation" (TOON) format. Features a beautiful, IDE-like interface with dark mode support.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **File Upload**: Drag-and-drop or select JSON files for conversion.
+- **IDE-like Editor**: Real-time JSON editing with syntax highlighting using Monaco Editor (VS Code's editor).
+- **Split View**: Side-by-side comparison of input JSON and output TOON.
+- **Dark/Light Mode**: Toggle between themes for comfortable viewing in any lighting.
+- **Instant Conversion**: Powered by the official `@toon-format/toon` library.
+- **Download**: Easily download the converted `.toon.json` files.
 
-## React Compiler
+## Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Frontend**: React, TypeScript, Vite
+- **Styling**: TailwindCSS
+- **Editor**: `@monaco-editor/react`
+- **Conversion**: `@toon-format/toon`
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js (v18 or higher recommended)
+- npm
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/rafaelkenedy/json2toon.git
+   cd json2toon
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. Open your browser and navigate to `http://localhost:5173`.
+
+## Usage
+
+1. **Upload Mode**: Click "Upload File" or drag a JSON file onto the drop zone. The app will automatically convert it and switch to the text editor view.
+2. **Text Editor Mode**: Paste your JSON directly into the left pane. The converted TOON format will appear instantly in the right pane.
+3. **Download**: Click the "Download Toon File" button to save the result.
+4. **Theme**: Use the Sun/Moon icon in the top right to toggle between light and dark modes.
+
+## License
+
+MIT

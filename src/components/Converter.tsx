@@ -4,7 +4,12 @@ import { DownloadButton } from './DownloadButton';
 import { JsonEditor } from './JsonEditor';
 import { convertJsonToToon } from '../utils/toonConverter';
 
-export const Converter: React.FC = () => {
+interface ConverterProps {
+    darkMode: boolean;
+    toggleDarkMode: () => void;
+}
+
+export const Converter: React.FC<ConverterProps> = ({ darkMode, toggleDarkMode }) => {
     const [inputJson, setInputJson] = useState<string>('');
     const [outputJson, setOutputJson] = useState<string>('');
     const [fileName, setFileName] = useState<string>('data.toon.json');
@@ -47,31 +52,55 @@ export const Converter: React.FC = () => {
     };
 
     return (
-        <div className="flex flex-col items-center gap-6 p-6 bg-white rounded-xl shadow-lg w-full max-w-6xl h-[80vh]">
-            <div className="flex justify-between w-full items-center border-b pb-4">
-                <h2 className="text-2xl font-bold text-gray-800">JSON to Toon Converter</h2>
-                <div className="flex gap-2">
+        <div className="flex flex-col items-center gap-6 p-6 bg-white dark:bg-gray-800 rounded-xl shadow-lg w-full max-w-6xl h-[80vh] transition-colors duration-200">
+            <div className="flex justify-between w-full items-center border-b dark:border-gray-700 pb-4">
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">JSON to Toon Converter</h2>
+                <div className="flex items-center gap-4">
                     <button
-                        onClick={() => setViewMode('upload')}
-                        className={`px-4 py-2 rounded-md transition-colors ${viewMode === 'upload' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-100'
-                            }`}
+                        onClick={toggleDarkMode}
+                        className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Toggle dark mode"
+                        title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
                     >
-                        Upload File
+                        {darkMode ? (
+                            // Sun icon (show when in dark mode to switch to light)
+                            <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                        ) : (
+                            // Moon icon (show when in light mode to switch to dark)
+                            <svg className="w-6 h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 24.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                            </svg>
+                        )}
                     </button>
-                    <button
-                        onClick={() => setViewMode('text')}
-                        className={`px-4 py-2 rounded-md transition-colors ${viewMode === 'text' ? 'bg-blue-100 text-blue-700 font-medium' : 'text-gray-600 hover:bg-gray-100'
-                            }`}
-                    >
-                        Text Editor
-                    </button>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={() => setViewMode('upload')}
+                            className={`px-4 py-2 rounded-md transition-colors ${viewMode === 'upload'
+                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 font-medium'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                }`}
+                        >
+                            Upload File
+                        </button>
+                        <button
+                            onClick={() => setViewMode('text')}
+                            className={`px-4 py-2 rounded-md transition-colors ${viewMode === 'text'
+                                    ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200 font-medium'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                }`}
+                        >
+                            Text Editor
+                        </button>
+                    </div>
                 </div>
             </div>
 
             {viewMode === 'upload' ? (
                 <div className="flex-1 flex flex-col items-center justify-center w-full">
                     <FileUpload onFileUpload={handleFileUpload} />
-                    <p className="mt-4 text-gray-500">or switch to Text Editor to paste JSON</p>
+                    <p className="mt-4 text-gray-500 dark:text-gray-400">or switch to Text Editor to paste JSON</p>
                 </div>
             ) : (
                 <div className="flex-1 flex gap-4 w-full min-h-0">
@@ -81,6 +110,7 @@ export const Converter: React.FC = () => {
                             value={inputJson}
                             onChange={handleInputChange}
                             error={error}
+                            darkMode={darkMode}
                         />
                     </div>
                     <div className="flex-1 flex flex-col min-h-0">
@@ -88,13 +118,14 @@ export const Converter: React.FC = () => {
                             label="Toon Output"
                             value={outputJson}
                             readOnly={true}
+                            darkMode={darkMode}
                         />
                     </div>
                 </div>
             )}
 
             {outputJson && !error && (
-                <div className="flex gap-4 pt-4 border-t w-full justify-end">
+                <div className="flex gap-4 pt-4 border-t dark:border-gray-700 w-full justify-end">
                     <DownloadButton data={outputJson} fileName={fileName} />
                 </div>
             )}
