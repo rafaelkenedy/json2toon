@@ -1,6 +1,6 @@
 import { encode } from '@toon-format/toon';
 
-export const convertJsonToToon = (json: any): any => {
+export const convertJsonToToon = (json: unknown): string => {
     try {
         return encode(json);
     } catch (error) {

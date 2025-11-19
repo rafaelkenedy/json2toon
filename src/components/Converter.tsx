@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FileUpload } from './FileUpload';
 import { DownloadButton } from './DownloadButton';
 import { JsonEditor } from './JsonEditor';
@@ -11,24 +11,28 @@ export const Converter: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'upload' | 'text'>('upload');
 
-    useEffect(() => {
-        if (!inputJson) {
+    const processJson = (json: string) => {
+        if (!json) {
             setOutputJson('');
             setError(null);
             return;
         }
 
         try {
-            const parsed = JSON.parse(inputJson);
+            const parsed = JSON.parse(json);
             const converted = convertJsonToToon(parsed);
-            // converted is already a string from @toon-format/toon
             setOutputJson(converted);
             setError(null);
-        } catch (err) {
+        } catch {
             setError('Invalid JSON');
             // Don't clear output to allow user to fix input without losing context
         }
-    }, [inputJson]);
+    };
+
+    const handleInputChange = (value: string) => {
+        setInputJson(value);
+        processJson(value);
+    };
 
     const handleFileUpload = (file: File) => {
         const reader = new FileReader();
@@ -36,6 +40,7 @@ export const Converter: React.FC = () => {
             const text = e.target?.result as string;
             setInputJson(text);
             setFileName(file.name.replace('.json', '.toon.json'));
+            processJson(text);
             setViewMode('text'); // Switch to text view to show result
         };
         reader.readAsText(file);
@@ -74,7 +79,7 @@ export const Converter: React.FC = () => {
                         <JsonEditor
                             label="Input JSON"
                             value={inputJson}
-                            onChange={setInputJson}
+                            onChange={handleInputChange}
                             error={error}
                         />
                     </div>
