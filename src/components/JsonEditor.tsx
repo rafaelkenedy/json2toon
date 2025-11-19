@@ -1,4 +1,5 @@
 import React from 'react';
+import Editor from '@monaco-editor/react';
 
 interface JsonEditorProps {
     value: string;
@@ -18,17 +19,26 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({
     return (
         <div className="flex flex-col h-full w-full">
             <label className="mb-2 text-sm font-medium text-gray-700">{label}</label>
-            <textarea
-                className={`flex-1 w-full p-4 font-mono text-sm border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all
-          ${error ? 'border-red-500 bg-red-50' : 'border-gray-300 bg-gray-50'}
-          ${readOnly ? 'bg-gray-100 text-gray-600 cursor-not-allowed' : 'text-gray-800'}
-        `}
-                value={value}
-                onChange={(e) => onChange && onChange(e.target.value)}
-                readOnly={readOnly}
-                spellCheck={false}
-                placeholder={readOnly ? '' : 'Paste your JSON here...'}
-            />
+            <div className={`flex-1 w-full border rounded-lg overflow-hidden transition-all ${error ? 'border-red-500' : 'border-gray-300'
+                }`}>
+                <Editor
+                    height="100%"
+                    defaultLanguage="json"
+                    value={value}
+                    theme="vs-dark"
+                    onChange={(value) => onChange && onChange(value || '')}
+                    options={{
+                        readOnly,
+                        minimap: { enabled: false },
+                        fontSize: 14,
+                        scrollBeyondLastLine: false,
+                        automaticLayout: true,
+                        wordWrap: 'on',
+                        formatOnPaste: true,
+                        formatOnType: true,
+                    }}
+                />
+            </div>
             {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
         </div>
     );
